@@ -28,22 +28,23 @@
     });
 
     // Listen for render requests from Elm
-    app.ports.renderMath.subscribe((expression) => {
+    app.ports.renderMathInternal.subscribe(({ expression, target }) => {
+      const outputId = target === 'goal' ? 'svg-output-goal' : 'svg-output-user';
       try {
         const svg = renderMath(expression);
         // Update the DOM directly
-        const output = document.getElementById('svg-output');
+        const output = document.getElementById(outputId);
         if (output) {
           output.innerHTML = svg;
         }
-        app.ports.mathRendered.send(svg);
+        app.ports.mathRendered.send({ target, svg });
       } catch (err) {
         console.error('Render error:', err);
-        const output = document.getElementById('svg-output');
+        const output = document.getElementById(outputId);
         if (output) {
           output.innerHTML = '<span style="color: red;">Error: ' + err + '</span>';
         }
-        app.ports.mathRendered.send('Error: ' + err);
+        app.ports.mathRendered.send({ target, svg: 'Error: ' + err });
       }
     });
   </script>

@@ -1,7 +1,21 @@
 port module Ports exposing (mathRendered, renderMath)
 
--- Send math expression to JS for rendering
-port renderMath : String -> Cmd msg
+import Json.Encode as E
 
--- Receive SVG result from JS
-port mathRendered : (String -> msg) -> Sub msg
+
+-- Send math expression to JS for rendering with target identifier
+port renderMathInternal : E.Value -> Cmd msg
+
+
+renderMath : { expression : String, target : String } -> Cmd msg
+renderMath { expression, target } =
+    renderMathInternal
+        (E.object
+            [ ( "expression", E.string expression )
+            , ( "target", E.string target )
+            ]
+        )
+
+
+-- Receive SVG result from JS with target identifier (JSON: { target, svg })
+port mathRendered : (E.Value -> msg) -> Sub msg

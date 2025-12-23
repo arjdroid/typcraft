@@ -4,29 +4,37 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
+import Json.Decode as D
 import Json.Encode
 import Ports
 
 
 type alias Model =
     { expression : String
-    , svg : String
+    , userSvg : String
+    , goalSvg : String
+    , goalExpression : String
     }
 
 
 type Msg
     = ExpressionChanged String
-    | SvgRendered String
+    | SvgRendered D.Value
+
+
+goalExpression : String
+goalExpression =
+    "F_g = (G m_1 m_2) / (r^2)"
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    let
-        initialExpr =
-            "F_g = (G m_1 m_2) / (r^2)"
-    in
-    ( { expression = initialExpr, svg = "" }
-    , Ports.renderMath initialExpr
+    ( { expression = ""
+      , userSvg = ""
+      , goalSvg = ""
+      , goalExpression = goalExpression
+      }
+    , Ports.renderMath { expression = goalExpression, target = "goal" }
     )
 
 
@@ -35,11 +43,25 @@ update msg model =
     case msg of
         ExpressionChanged newExpr ->
             ( { model | expression = newExpr }
-            , Ports.renderMath newExpr
+            , Ports.renderMath { expression = newExpr, target = "user" }
             )
 
-        SvgRendered svgContent ->
-            ( { model | svg = svgContent }, Cmd.none )
+        SvgRendered jsonValue ->
+            let
+                decoder =
+                    D.map2 Tuple.pair
+                        (D.field "target" D.string)
+                        (D.field "svg" D.string)
+            in
+            case D.decodeValue decoder jsonValue of
+                Ok ( "user", svg ) ->
+                    ( { model | userSvg = svg }, Cmd.none )
+
+                Ok ( "goal", svg ) ->
+                    ( { model | goalSvg = svg }, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
 
 
 view : Model -> Html Msg
@@ -77,7 +99,22 @@ view model =
                 , style "display" "flex"
                 , style "align-items" "center"
                 , style "justify-content" "center"
-                , id "svg-output"
+                , id "svg-output-user"
+                ]
+                []
+            ]
+        , div [ style "margin-top" "1rem" ]
+            [ label [ style "display" "block", style "margin-bottom" "0.5rem" ]
+                [ text "Goal:" ]
+            , div
+                [ style "border" "1px solid #000"
+                , style "padding" "1rem"
+                , style "min-height" "100px"
+                , style "background" "#ffffff"
+                , style "display" "flex"
+                , style "align-items" "center"
+                , style "justify-content" "center"
+                , id "svg-output-goal"
                 ]
                 []
             ]
