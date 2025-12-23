@@ -31,6 +31,10 @@
           # JS runtime
           bun
 
+          # Favicon build tools
+          typst
+          imagemagick
+
           # Rust + WASM tools
           rustToolchain
           wasm-pack
