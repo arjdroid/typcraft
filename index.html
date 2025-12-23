@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>typcraft</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    * { box-sizing: border-box; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Load Elm first (regular script, not module) -->
+  <script src="elm.js"></script>
+
+  <!-- Then load WASM and connect everything -->
+  <script type="module">
+    import init, { renderMath } from './pkg/typst_math_svg.js';
+
+    // Initialize WASM
+    await init();
+    console.log('Typst WASM initialized');
+
+    // Start Elm app
+    const app = Elm.Main.init({
+      node: document.getElementById('app')
+    });
+
+    // Listen for render requests from Elm
+    app.ports.renderMathInternal.subscribe(({ expression, target }) => {
+      const outputId = target === 'goal' ? 'svg-output-goal' : 'svg-output-user';
+      try {
+        const svg = renderMath(expression);
+        // Update the DOM directly
+        const output = document.getElementById(outputId);
+        if (output) {
+          output.innerHTML = svg;
+        }
+        app.ports.mathRendered.send({ target, svg });
+      } catch (err) {
+        console.error('Render error:', err);
+        const output = document.getElementById(outputId);
+        if (output) {
+          output.innerHTML = '<span style="color: red;">Error: ' + err + '</span>';
+        }
+        app.ports.mathRendered.send({ target, svg: 'Error: ' + err });
+      }
+    });
+  </script>
+</body>
+</html>

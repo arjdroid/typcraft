@@ -1,0 +1,15 @@
+{
+  "name": "typst-math-svg",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "typst_math_svg_bg.wasm",
+    "typst_math_svg.js",
+    "typst_math_svg.d.ts"
+  ],
+  "main": "typst_math_svg.js",
+  "types": "typst_math_svg.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
