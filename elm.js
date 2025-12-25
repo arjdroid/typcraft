@@ -5666,6 +5666,32 @@ var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $author$project$Main$viewResult = function (model) {
+	return ($elm$core$String$isEmpty(model.userSvg) || $elm$core$String$isEmpty(model.goalSvg)) ? $elm$html$Html$text('') : (_Utils_eq(model.userSvg, model.goalSvg) ? A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$style, 'margin-top', '1rem'),
+				A2($elm$html$Html$Attributes$style, 'padding', '0.5rem'),
+				A2($elm$html$Html$Attributes$style, 'color', 'green'),
+				A2($elm$html$Html$Attributes$style, 'font-weight', 'bold')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('Correct!')
+			])) : A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$style, 'margin-top', '1rem'),
+				A2($elm$html$Html$Attributes$style, 'padding', '0.5rem'),
+				A2($elm$html$Html$Attributes$style, 'color', 'gray')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('Not quite...')
+			])));
+};
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -5789,7 +5815,8 @@ var $author$project$Main$view = function (model) {
 								$elm$html$Html$Attributes$id('svg-output-goal')
 							]),
 						_List_Nil)
-					]))
+					])),
+				$author$project$Main$viewResult(model)
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
