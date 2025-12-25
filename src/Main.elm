@@ -103,24 +103,24 @@ view model =
         , style "padding" "1rem"
         ]
         [ h1 [ style "margin-bottom" "1rem" ] [ text "typcraft" ]
-        , div [ style "margin-bottom" "1rem" ]
+        , div [ style "margin-top" "1rem" ]
             [ label [ style "display" "block", style "margin-bottom" "0.5rem" ]
-                [ text "Typst math expression:" ]
-            , input
-                [ type_ "text"
-                , value model.expression
-                , onInput ExpressionChanged
-                , style "width" "100%"
-                , style "padding" "0.5rem"
-                , style "font-size" "1rem"
-                , style "font-family" "monospace"
-                , style "box-sizing" "border-box"
+                [ text ("Typesetting Goal: " ++ model.goalEquation.name) ]
+            , div
+                [ style "border" "1px solid #000"
+                , style "padding" "1rem"
+                , style "min-height" "100px"
+                , style "background" "#ffffff"
+                , style "display" "flex"
+                , style "align-items" "center"
+                , style "justify-content" "center"
+                , id "svg-output-goal"
                 ]
                 []
             ]
         , div [ style "margin-top" "1rem" ]
             [ label [ style "display" "block", style "margin-bottom" "0.5rem" ]
-                [ text "Rendered output:" ]
+                [ text "Your typst output:" ]
             , div
                 [ style "border" "1px solid #000"
                 , style "padding" "1rem"
@@ -135,16 +135,16 @@ view model =
             ]
         , div [ style "margin-top" "1rem" ]
             [ label [ style "display" "block", style "margin-bottom" "0.5rem" ]
-                [ text ("Goal: " ++ model.goalEquation.name) ]
-            , div
-                [ style "border" "1px solid #000"
-                , style "padding" "1rem"
-                , style "min-height" "100px"
-                , style "background" "#ffffff"
-                , style "display" "flex"
-                , style "align-items" "center"
-                , style "justify-content" "center"
-                , id "svg-output-goal"
+                [ text "Your typst code:" ]
+            , input
+                [ type_ "text"
+                , value model.expression
+                , onInput ExpressionChanged
+                , style "width" "100%"
+                , style "padding" "0.5rem"
+                , style "font-size" "1rem"
+                , style "font-family" "monospace"
+                , style "box-sizing" "border-box"
                 ]
                 []
             ]
