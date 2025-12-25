@@ -148,7 +148,31 @@ view model =
                 ]
                 []
             ]
+        , viewResult model
         ]
+
+
+viewResult : Model -> Html Msg
+viewResult model =
+    if String.isEmpty model.userSvg || String.isEmpty model.goalSvg then
+        text ""
+
+    else if model.userSvg == model.goalSvg then
+        div
+            [ style "margin-top" "1rem"
+            , style "padding" "0.5rem"
+            , style "color" "green"
+            , style "font-weight" "bold"
+            ]
+            [ text "Correct!" ]
+
+    else
+        div
+            [ style "margin-top" "1rem"
+            , style "padding" "0.5rem"
+            , style "color" "gray"
+            ]
+            [ text "Not quite..." ]
 
 
 subscriptions : Model -> Sub Msg
