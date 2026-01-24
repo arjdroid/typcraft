@@ -5245,6 +5245,7 @@ var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Main$EquationSelected = function (a) {
 	return {$: 'EquationSelected', a: a};
 };
+var $author$project$Main$Landing = {$: 'Landing'};
 var $elm$core$Array$fromListHelp = F3(
 	function (list, nodeList, nodeListSize) {
 		fromListHelp:
@@ -5283,16 +5284,15 @@ var $elm$core$Array$fromList = function (list) {
 var $author$project$Main$equations = $elm$core$Array$fromList(
 	_List_fromArray(
 		[
-			{name: 'Newton\'s Gravitation', typst: 'F_g = (G m_1 m_2) / (r^2)'},
+			{name: 'Newton\'s Gravitaty Equation', typst: 'F_g = (G m_1 m_2) / (r^2)'},
 			{name: 'Euler\'s Identity', typst: 'e^(i pi) + 1 = 0'},
-			{name: 'Pythagorean Theorem', typst: 'a^2 + b^2 = c^2'},
-			{name: 'Quadratic Formula', typst: 'x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a)'},
+			{name: 'The Pythagorean Theorem', typst: 'a^2 + b^2 = c^2'},
+			{name: 'The Quadratic Formula', typst: 'x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a)'},
 			{name: 'Einstein\'s Mass-Energy', typst: 'E = m c^2'},
-			{name: 'Schrödinger Equation', typst: 'i hbar (diff Psi) / (diff t) = hat(H) Psi'},
 			{name: 'Maxwell\'s Equations (Gauss)', typst: 'nabla dot bold(E) = rho / epsilon_0'},
 			{name: 'Euler\'s Formula', typst: 'e^(i theta) = cos theta + i sin theta'},
-			{name: 'Binomial Theorem', typst: '(x + y)^n = sum_(k=0)^n binom(n, k) x^(n-k) y^k'},
-			{name: 'Fourier Transform', typst: 'hat(f)(xi) = integral_(-oo)^oo f(x) e^(-2 pi i x xi) dif x'}
+			{name: 'The Binomial Theorem', typst: '(x + y)^n = sum_(k=0)^n binom(n, k) x^(n-k) y^k'},
+			{name: 'The Fourier Transform', typst: 'hat(f)(xi) = integral_(-oo)^oo f(x) e^(-2 pi i x xi) dif x'}
 		]));
 var $elm$random$Random$Generate = function (a) {
 	return {$: 'Generate', a: a};
@@ -5453,6 +5453,7 @@ var $author$project$Main$init = function (_v0) {
 			expression: '',
 			goalEquation: {name: '', typst: ''},
 			goalSvg: '',
+			page: $author$project$Main$Landing,
 			userSvg: ''
 		},
 		A2(
@@ -5463,16 +5464,467 @@ var $author$project$Main$init = function (_v0) {
 				0,
 				$elm$core$Array$length($author$project$Main$equations) - 1)));
 };
+var $author$project$Main$KeyDown = F3(
+	function (a, b, c) {
+		return {$: 'KeyDown', a: a, b: b, c: c};
+	});
 var $author$project$Main$SvgRendered = function (a) {
 	return {$: 'SvgRendered', a: a};
 };
+var $elm$core$Platform$Sub$batch = _Platform_batch;
+var $elm$json$Json$Decode$bool = _Json_decodeBool;
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$map3 = _Json_map3;
 var $elm$json$Json$Decode$value = _Json_decodeValue;
 var $author$project$Ports$mathRendered = _Platform_incomingPort('mathRendered', $elm$json$Json$Decode$value);
-var $author$project$Main$subscriptions = function (_v0) {
-	return $author$project$Ports$mathRendered($author$project$Main$SvgRendered);
+var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
+var $elm$browser$Browser$Events$Document = {$: 'Document'};
+var $elm$browser$Browser$Events$MySub = F3(
+	function (a, b, c) {
+		return {$: 'MySub', a: a, b: b, c: c};
+	});
+var $elm$browser$Browser$Events$State = F2(
+	function (subs, pids) {
+		return {pids: pids, subs: subs};
+	});
+var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
+var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
+var $elm$browser$Browser$Events$init = $elm$core$Task$succeed(
+	A2($elm$browser$Browser$Events$State, _List_Nil, $elm$core$Dict$empty));
+var $elm$browser$Browser$Events$nodeToKey = function (node) {
+	if (node.$ === 'Document') {
+		return 'd_';
+	} else {
+		return 'w_';
+	}
 };
+var $elm$browser$Browser$Events$addKey = function (sub) {
+	var node = sub.a;
+	var name = sub.b;
+	return _Utils_Tuple2(
+		_Utils_ap(
+			$elm$browser$Browser$Events$nodeToKey(node),
+			name),
+		sub);
+};
+var $elm$core$Dict$Black = {$: 'Black'};
+var $elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
+	});
+var $elm$core$Dict$Red = {$: 'Red'};
+var $elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
+			var _v1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
+				var _v3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					$elm$core$Dict$Red,
+					key,
+					value,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, left, rLeft),
+					rRight);
+			}
+		} else {
+			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
+				var _v5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _v6 = left.d;
+				var _v7 = _v6.a;
+				var llK = _v6.b;
+				var llV = _v6.c;
+				var llLeft = _v6.d;
+				var llRight = _v6.e;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					$elm$core$Dict$Red,
+					lK,
+					lV,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, lRight, right));
+			} else {
+				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
+			}
+		}
+	});
+var $elm$core$Basics$compare = _Utils_compare;
+var $elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === 'RBEmpty_elm_builtin') {
+			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
+		} else {
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _v1 = A2($elm$core$Basics$compare, key, nKey);
+			switch (_v1.$) {
+				case 'LT':
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3($elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 'EQ':
+					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3($elm$core$Dict$insertHelp, key, value, nRight));
+			}
+		}
+	});
+var $elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
+		if ((_v0.$ === 'RBNode_elm_builtin') && (_v0.a.$ === 'Red')) {
+			var _v1 = _v0.a;
+			var k = _v0.b;
+			var v = _v0.c;
+			var l = _v0.d;
+			var r = _v0.e;
+			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, k, v, l, r);
+		} else {
+			var x = _v0;
+			return x;
+		}
+	});
+var $elm$core$Dict$fromList = function (assocs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, dict) {
+				var key = _v0.a;
+				var value = _v0.b;
+				return A3($elm$core$Dict$insert, key, value, dict);
+			}),
+		$elm$core$Dict$empty,
+		assocs);
+};
+var $elm$core$Process$kill = _Scheduler_kill;
+var $elm$core$Dict$foldl = F3(
+	function (func, acc, dict) {
+		foldl:
+		while (true) {
+			if (dict.$ === 'RBEmpty_elm_builtin') {
+				return acc;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var $temp$func = func,
+					$temp$acc = A3(
+					func,
+					key,
+					value,
+					A3($elm$core$Dict$foldl, func, acc, left)),
+					$temp$dict = right;
+				func = $temp$func;
+				acc = $temp$acc;
+				dict = $temp$dict;
+				continue foldl;
+			}
+		}
+	});
+var $elm$core$Dict$merge = F6(
+	function (leftStep, bothStep, rightStep, leftDict, rightDict, initialResult) {
+		var stepState = F3(
+			function (rKey, rValue, _v0) {
+				stepState:
+				while (true) {
+					var list = _v0.a;
+					var result = _v0.b;
+					if (!list.b) {
+						return _Utils_Tuple2(
+							list,
+							A3(rightStep, rKey, rValue, result));
+					} else {
+						var _v2 = list.a;
+						var lKey = _v2.a;
+						var lValue = _v2.b;
+						var rest = list.b;
+						if (_Utils_cmp(lKey, rKey) < 0) {
+							var $temp$rKey = rKey,
+								$temp$rValue = rValue,
+								$temp$_v0 = _Utils_Tuple2(
+								rest,
+								A3(leftStep, lKey, lValue, result));
+							rKey = $temp$rKey;
+							rValue = $temp$rValue;
+							_v0 = $temp$_v0;
+							continue stepState;
+						} else {
+							if (_Utils_cmp(lKey, rKey) > 0) {
+								return _Utils_Tuple2(
+									list,
+									A3(rightStep, rKey, rValue, result));
+							} else {
+								return _Utils_Tuple2(
+									rest,
+									A4(bothStep, lKey, lValue, rValue, result));
+							}
+						}
+					}
+				}
+			});
+		var _v3 = A3(
+			$elm$core$Dict$foldl,
+			stepState,
+			_Utils_Tuple2(
+				$elm$core$Dict$toList(leftDict),
+				initialResult),
+			rightDict);
+		var leftovers = _v3.a;
+		var intermediateResult = _v3.b;
+		return A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v4, result) {
+					var k = _v4.a;
+					var v = _v4.b;
+					return A3(leftStep, k, v, result);
+				}),
+			intermediateResult,
+			leftovers);
+	});
+var $elm$browser$Browser$Events$Event = F2(
+	function (key, event) {
+		return {event: event, key: key};
+	});
+var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
+var $elm$browser$Browser$Events$spawn = F3(
+	function (router, key, _v0) {
+		var node = _v0.a;
+		var name = _v0.b;
+		var actualNode = function () {
+			if (node.$ === 'Document') {
+				return _Browser_doc;
+			} else {
+				return _Browser_window;
+			}
+		}();
+		return A2(
+			$elm$core$Task$map,
+			function (value) {
+				return _Utils_Tuple2(key, value);
+			},
+			A3(
+				_Browser_on,
+				actualNode,
+				name,
+				function (event) {
+					return A2(
+						$elm$core$Platform$sendToSelf,
+						router,
+						A2($elm$browser$Browser$Events$Event, key, event));
+				}));
+	});
+var $elm$core$Dict$union = F2(
+	function (t1, t2) {
+		return A3($elm$core$Dict$foldl, $elm$core$Dict$insert, t2, t1);
+	});
+var $elm$browser$Browser$Events$onEffects = F3(
+	function (router, subs, state) {
+		var stepRight = F3(
+			function (key, sub, _v6) {
+				var deads = _v6.a;
+				var lives = _v6.b;
+				var news = _v6.c;
+				return _Utils_Tuple3(
+					deads,
+					lives,
+					A2(
+						$elm$core$List$cons,
+						A3($elm$browser$Browser$Events$spawn, router, key, sub),
+						news));
+			});
+		var stepLeft = F3(
+			function (_v4, pid, _v5) {
+				var deads = _v5.a;
+				var lives = _v5.b;
+				var news = _v5.c;
+				return _Utils_Tuple3(
+					A2($elm$core$List$cons, pid, deads),
+					lives,
+					news);
+			});
+		var stepBoth = F4(
+			function (key, pid, _v2, _v3) {
+				var deads = _v3.a;
+				var lives = _v3.b;
+				var news = _v3.c;
+				return _Utils_Tuple3(
+					deads,
+					A3($elm$core$Dict$insert, key, pid, lives),
+					news);
+			});
+		var newSubs = A2($elm$core$List$map, $elm$browser$Browser$Events$addKey, subs);
+		var _v0 = A6(
+			$elm$core$Dict$merge,
+			stepLeft,
+			stepBoth,
+			stepRight,
+			state.pids,
+			$elm$core$Dict$fromList(newSubs),
+			_Utils_Tuple3(_List_Nil, $elm$core$Dict$empty, _List_Nil));
+		var deadPids = _v0.a;
+		var livePids = _v0.b;
+		var makeNewPids = _v0.c;
+		return A2(
+			$elm$core$Task$andThen,
+			function (pids) {
+				return $elm$core$Task$succeed(
+					A2(
+						$elm$browser$Browser$Events$State,
+						newSubs,
+						A2(
+							$elm$core$Dict$union,
+							livePids,
+							$elm$core$Dict$fromList(pids))));
+			},
+			A2(
+				$elm$core$Task$andThen,
+				function (_v1) {
+					return $elm$core$Task$sequence(makeNewPids);
+				},
+				$elm$core$Task$sequence(
+					A2($elm$core$List$map, $elm$core$Process$kill, deadPids))));
+	});
+var $elm$core$List$maybeCons = F3(
+	function (f, mx, xs) {
+		var _v0 = f(mx);
+		if (_v0.$ === 'Just') {
+			var x = _v0.a;
+			return A2($elm$core$List$cons, x, xs);
+		} else {
+			return xs;
+		}
+	});
+var $elm$core$List$filterMap = F2(
+	function (f, xs) {
+		return A3(
+			$elm$core$List$foldr,
+			$elm$core$List$maybeCons(f),
+			_List_Nil,
+			xs);
+	});
+var $elm$browser$Browser$Events$onSelfMsg = F3(
+	function (router, _v0, state) {
+		var event = _v0.event;
+		var key = _v0.key;
+		var toMessage = function (_v2) {
+			var subKey = _v2.a;
+			var _v3 = _v2.b;
+			var node = _v3.a;
+			var name = _v3.b;
+			var decoder = _v3.c;
+			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : $elm$core$Maybe$Nothing;
+		};
+		var messages = A2($elm$core$List$filterMap, toMessage, state.subs);
+		return A2(
+			$elm$core$Task$andThen,
+			function (_v1) {
+				return $elm$core$Task$succeed(state);
+			},
+			$elm$core$Task$sequence(
+				A2(
+					$elm$core$List$map,
+					$elm$core$Platform$sendToApp(router),
+					messages)));
+	});
+var $elm$browser$Browser$Events$subMap = F2(
+	function (func, _v0) {
+		var node = _v0.a;
+		var name = _v0.b;
+		var decoder = _v0.c;
+		return A3(
+			$elm$browser$Browser$Events$MySub,
+			node,
+			name,
+			A2($elm$json$Json$Decode$map, func, decoder));
+	});
+_Platform_effectManagers['Browser.Events'] = _Platform_createManager($elm$browser$Browser$Events$init, $elm$browser$Browser$Events$onEffects, $elm$browser$Browser$Events$onSelfMsg, 0, $elm$browser$Browser$Events$subMap);
+var $elm$browser$Browser$Events$subscription = _Platform_leaf('Browser.Events');
+var $elm$browser$Browser$Events$on = F3(
+	function (node, name, decoder) {
+		return $elm$browser$Browser$Events$subscription(
+			A3($elm$browser$Browser$Events$MySub, node, name, decoder));
+	});
+var $elm$browser$Browser$Events$onKeyDown = A2($elm$browser$Browser$Events$on, $elm$browser$Browser$Events$Document, 'keydown');
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Main$subscriptions = function (model) {
+	return $elm$core$Platform$Sub$batch(
+		_List_fromArray(
+			[
+				$author$project$Ports$mathRendered($author$project$Main$SvgRendered),
+				_Utils_eq(model.page, $author$project$Main$Landing) ? $elm$browser$Browser$Events$onKeyDown(
+				A4(
+					$elm$json$Json$Decode$map3,
+					$author$project$Main$KeyDown,
+					A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string),
+					A2($elm$json$Json$Decode$field, 'ctrlKey', $elm$json$Json$Decode$bool),
+					A2($elm$json$Json$Decode$field, 'metaKey', $elm$json$Json$Decode$bool))) : $elm$core$Platform$Sub$none
+			]));
+};
+var $author$project$Main$App = {$: 'App'};
+var $author$project$Main$NewEquation = {$: 'NewEquation'};
+var $author$project$Main$NoOp = {$: 'NoOp'};
+var $author$project$Main$StartApp = {$: 'StartApp'};
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var $elm$core$Task$onError = _Scheduler_onError;
+var $elm$core$Task$attempt = F2(
+	function (resultToMessage, task) {
+		return $elm$core$Task$command(
+			$elm$core$Task$Perform(
+				A2(
+					$elm$core$Task$onError,
+					A2(
+						$elm$core$Basics$composeL,
+						A2($elm$core$Basics$composeL, $elm$core$Task$succeed, resultToMessage),
+						$elm$core$Result$Err),
+					A2(
+						$elm$core$Task$andThen,
+						A2(
+							$elm$core$Basics$composeL,
+							A2($elm$core$Basics$composeL, $elm$core$Task$succeed, resultToMessage),
+							$elm$core$Result$Ok),
+						task))));
+	});
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$json$Json$Decode$decodeValue = _Json_run;
-var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$browser$Browser$Dom$focus = _Browser_call('focus');
 var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
 var $elm$core$Basics$ge = _Utils_ge;
 var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
@@ -5513,7 +5965,6 @@ var $elm$core$Array$get = F2(
 			A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, tail)) : $elm$core$Maybe$Just(
 			A3($elm$core$Array$getHelp, startShift, index, tree)));
 	});
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $elm$core$Tuple$pair = F2(
 	function (a, b) {
@@ -5549,75 +6000,138 @@ var $author$project$Ports$renderMath = function (_v0) {
 					$elm$json$Json$Encode$string(target))
 				])));
 };
-var $elm$json$Json$Decode$string = _Json_decodeString;
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		switch (msg.$) {
-			case 'ExpressionChanged':
-				var newExpr = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{expression: newExpr}),
-					$author$project$Ports$renderMath(
-						{expression: newExpr, target: 'user'}));
-			case 'SvgRendered':
-				var jsonValue = msg.a;
-				var decoder = A3(
-					$elm$json$Json$Decode$map2,
-					$elm$core$Tuple$pair,
-					A2($elm$json$Json$Decode$field, 'target', $elm$json$Json$Decode$string),
-					A2($elm$json$Json$Decode$field, 'svg', $elm$json$Json$Decode$string));
-				var _v1 = A2($elm$json$Json$Decode$decodeValue, decoder, jsonValue);
-				_v1$2:
-				while (true) {
-					if (_v1.$ === 'Ok') {
-						switch (_v1.a.a) {
-							case 'user':
-								var _v2 = _v1.a;
-								var svg = _v2.b;
-								return _Utils_Tuple2(
-									_Utils_update(
-										model,
-										{userSvg: svg}),
-									$elm$core$Platform$Cmd$none);
-							case 'goal':
-								var _v3 = _v1.a;
-								var svg = _v3.b;
-								return _Utils_Tuple2(
-									_Utils_update(
-										model,
-										{goalSvg: svg}),
-									$elm$core$Platform$Cmd$none);
-							default:
-								break _v1$2;
-						}
-					} else {
-						break _v1$2;
-					}
-				}
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-			default:
-				var index = msg.a;
-				var _v4 = A2($elm$core$Array$get, index, $author$project$Main$equations);
-				if (_v4.$ === 'Just') {
-					var equation = _v4.a;
+		update:
+		while (true) {
+			switch (msg.$) {
+				case 'ExpressionChanged':
+					var newExpr = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{goalEquation: equation}),
+							{expression: newExpr}),
 						$author$project$Ports$renderMath(
-							{expression: equation.typst, target: 'goal'}));
-				} else {
+							{expression: newExpr, target: 'user'}));
+				case 'SvgRendered':
+					var jsonValue = msg.a;
+					var decoder = A3(
+						$elm$json$Json$Decode$map2,
+						$elm$core$Tuple$pair,
+						A2($elm$json$Json$Decode$field, 'target', $elm$json$Json$Decode$string),
+						A2($elm$json$Json$Decode$field, 'svg', $elm$json$Json$Decode$string));
+					var _v1 = A2($elm$json$Json$Decode$decodeValue, decoder, jsonValue);
+					_v1$2:
+					while (true) {
+						if (_v1.$ === 'Ok') {
+							switch (_v1.a.a) {
+								case 'user':
+									var _v2 = _v1.a;
+									var svg = _v2.b;
+									return _Utils_Tuple2(
+										_Utils_update(
+											model,
+											{userSvg: svg}),
+										$elm$core$Platform$Cmd$none);
+								case 'goal':
+									var _v3 = _v1.a;
+									var svg = _v3.b;
+									return _Utils_Tuple2(
+										_Utils_update(
+											model,
+											{goalSvg: svg}),
+										$elm$core$Platform$Cmd$none);
+								default:
+									break _v1$2;
+							}
+						} else {
+							break _v1$2;
+						}
+					}
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				}
+				case 'EquationSelected':
+					var index = msg.a;
+					var _v4 = A2($elm$core$Array$get, index, $author$project$Main$equations);
+					if (_v4.$ === 'Just') {
+						var equation = _v4.a;
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{goalEquation: equation}),
+							$author$project$Ports$renderMath(
+								{expression: equation.typst, target: 'goal'}));
+					} else {
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					}
+				case 'NewEquation':
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{expression: '', userSvg: ''}),
+						$elm$core$Platform$Cmd$batch(
+							_List_fromArray(
+								[
+									A2(
+									$elm$random$Random$generate,
+									$author$project$Main$EquationSelected,
+									A2(
+										$elm$random$Random$int,
+										0,
+										$elm$core$Array$length($author$project$Main$equations) - 1)),
+									$author$project$Ports$renderMath(
+									{expression: '', target: 'user'})
+								])));
+				case 'StartApp':
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{page: $author$project$Main$App}),
+						A2(
+							$elm$core$Task$attempt,
+							function (_v5) {
+								return $author$project$Main$NoOp;
+							},
+							$elm$browser$Browser$Dom$focus('typst-input')));
+				case 'KeyDown':
+					var key = msg.a;
+					var ctrl = msg.b;
+					var meta = msg.c;
+					if (_Utils_eq(model.page, $author$project$Main$Landing) && (key === 'Enter')) {
+						var $temp$msg = $author$project$Main$StartApp,
+							$temp$model = model;
+						msg = $temp$msg;
+						model = $temp$model;
+						continue update;
+					} else {
+						if ((ctrl || meta) && (key === 'Enter')) {
+							var $temp$msg = $author$project$Main$NewEquation,
+								$temp$model = model;
+							msg = $temp$msg;
+							model = $temp$model;
+							continue update;
+						} else {
+							return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+						}
+					}
+				default:
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+			}
 		}
 	});
+var $elm$html$Html$div = _VirtualDom_node('div');
 var $author$project$Main$ExpressionChanged = function (a) {
 	return {$: 'ExpressionChanged', a: a};
 };
-var $elm$html$Html$div = _VirtualDom_node('div');
-var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$autofocus = $elm$html$Html$Attributes$boolProperty('autofocus');
+var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
 		return A2(
@@ -5625,16 +6139,36 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			key,
 			$elm$json$Json$Encode$string(string));
 	});
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$html$Html$input = _VirtualDom_node('input');
-var $elm$html$Html$label = _VirtualDom_node('label');
+var $elm$core$Basics$not = _Basics_not;
+var $author$project$Main$isCorrect = function (model) {
+	return (!$elm$core$String$isEmpty(model.userSvg)) && ((!$elm$core$String$isEmpty(model.goalSvg)) && _Utils_eq(model.userSvg, model.goalSvg));
+};
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
 var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
 var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
 	return {$: 'MayStopPropagation', a: a};
 };
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$stopPropagationOn = F2(
 	function (event, decoder) {
 		return A2(
@@ -5660,47 +6194,244 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 			$elm$html$Html$Events$alwaysStop,
 			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
 };
+var $author$project$Main$onKeyDown = A2(
+	$elm$html$Html$Events$on,
+	'keydown',
+	A4(
+		$elm$json$Json$Decode$map3,
+		$author$project$Main$KeyDown,
+		A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string),
+		A2($elm$json$Json$Decode$field, 'ctrlKey', $elm$json$Json$Decode$bool),
+		A2($elm$json$Json$Decode$field, 'metaKey', $elm$json$Json$Decode$bool)));
+var $elm$html$Html$span = _VirtualDom_node('span');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
-var $author$project$Main$viewResult = function (model) {
-	return ($elm$core$String$isEmpty(model.userSvg) || $elm$core$String$isEmpty(model.goalSvg)) ? $elm$html$Html$text('') : (_Utils_eq(model.userSvg, model.goalSvg) ? A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				A2($elm$html$Html$Attributes$style, 'margin-top', '1rem'),
-				A2($elm$html$Html$Attributes$style, 'padding', '0.5rem'),
-				A2($elm$html$Html$Attributes$style, 'color', 'green'),
-				A2($elm$html$Html$Attributes$style, 'font-weight', 'bold')
-			]),
-		_List_fromArray(
-			[
-				$elm$html$Html$text('Correct!')
-			])) : A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				A2($elm$html$Html$Attributes$style, 'margin-top', '1rem'),
-				A2($elm$html$Html$Attributes$style, 'padding', '0.5rem'),
-				A2($elm$html$Html$Attributes$style, 'color', 'gray')
-			]),
-		_List_fromArray(
-			[
-				$elm$html$Html$text('Not quite...')
-			])));
-};
-var $author$project$Main$view = function (model) {
+var $author$project$Main$viewFeedback = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				A2($elm$html$Html$Attributes$style, 'font-family', 'system-ui, sans-serif'),
-				A2($elm$html$Html$Attributes$style, 'max-width', '800px'),
-				A2($elm$html$Html$Attributes$style, 'margin', '2rem auto'),
-				A2($elm$html$Html$Attributes$style, 'padding', '1rem')
+				A2($elm$html$Html$Attributes$style, 'height', '3rem'),
+				A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+				A2($elm$html$Html$Attributes$style, 'align-items', 'center')
+			]),
+		_List_fromArray(
+			[
+				$elm$core$String$isEmpty(model.userSvg) ? $elm$html$Html$text('') : ($author$project$Main$isCorrect(model) ? A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$style, 'color', 'var(--border-correct)'),
+						A2($elm$html$Html$Attributes$style, 'font-weight', '500')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Correct!')
+					])) : A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$style, 'color', 'var(--text-muted)')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Not quite...')
+					])))
+			]));
+};
+var $elm$html$Html$a = _VirtualDom_node('a');
+var $elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
+var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
+var $author$project$Main$viewFooter = A2(
+	$elm$html$Html$div,
+	_List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'position', 'fixed'),
+			A2($elm$html$Html$Attributes$style, 'bottom', '1rem'),
+			A2($elm$html$Html$Attributes$style, 'left', '1.5rem'),
+			A2($elm$html$Html$Attributes$style, 'right', '1.5rem'),
+			A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+			A2($elm$html$Html$Attributes$style, 'justify-content', 'space-between'),
+			A2($elm$html$Html$Attributes$style, 'align-items', 'center'),
+			A2($elm$html$Html$Attributes$style, 'pointer-events', 'none')
+		]),
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$span,
+			_List_fromArray(
+				[
+					A2($elm$html$Html$Attributes$style, 'font-size', '2rem'),
+					A2($elm$html$Html$Attributes$style, 'font-weight', '500'),
+					A2($elm$html$Html$Attributes$style, 'color', 'var(--text-primary)'),
+					A2($elm$html$Html$Attributes$style, 'opacity', '0.15')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('typcraft')
+				])),
+			A2(
+			$elm$html$Html$a,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$href('https://github.com/arjdroid/typcraft'),
+					$elm$html$Html$Attributes$target('_blank'),
+					$elm$html$Html$Attributes$class('github-link'),
+					A2($elm$html$Html$Attributes$style, 'pointer-events', 'auto'),
+					A2($elm$html$Html$Attributes$style, 'color', 'var(--text-muted)'),
+					A2($elm$html$Html$Attributes$style, 'text-decoration', 'none'),
+					A2($elm$html$Html$Attributes$style, 'font-size', '0.85rem')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('fork me on GitHub!')
+				]))
+		]));
+var $elm$html$Html$label = _VirtualDom_node('label');
+var $author$project$Main$viewLabel = function (labelText) {
+	return A2(
+		$elm$html$Html$label,
+		_List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$style, 'display', 'block'),
+				A2($elm$html$Html$Attributes$style, 'margin-bottom', '0.5rem'),
+				A2($elm$html$Html$Attributes$style, 'font-size', '1rem'),
+				A2($elm$html$Html$Attributes$style, 'text-transform', 'capitalize'),
+				A2($elm$html$Html$Attributes$style, 'letter-spacing', '0.05em'),
+				A2($elm$html$Html$Attributes$style, 'color', 'var(--text-muted)')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text(labelText)
+			]));
+};
+var $author$project$Main$viewSvgBox = F2(
+	function (boxId, borderColor) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$id(boxId),
+					$elm$html$Html$Attributes$class('svg-output-box'),
+					A2($elm$html$Html$Attributes$style, 'height', '120px'),
+					A2($elm$html$Html$Attributes$style, 'background', 'var(--bg-surface)'),
+					A2($elm$html$Html$Attributes$style, 'border-radius', '8px'),
+					A2($elm$html$Html$Attributes$style, 'border', '1px solid ' + borderColor),
+					A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+					A2($elm$html$Html$Attributes$style, 'align-items', 'center'),
+					A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
+					A2($elm$html$Html$Attributes$style, 'padding', '1rem')
+				]),
+			_List_Nil);
+	});
+var $author$project$Main$viewApp = function (model) {
+	var userBorderColor = $author$project$Main$isCorrect(model) ? 'var(--border-correct)' : 'var(--border-color)';
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$style, 'max-width', '700px'),
+				A2($elm$html$Html$Attributes$style, 'margin', '3rem auto'),
+				A2($elm$html$Html$Attributes$style, 'padding', '0 1.5rem')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$style, 'margin-bottom', '1.5rem')
+					]),
+				_List_fromArray(
+					[
+						$author$project$Main$viewLabel('Goal: typeset ' + model.goalEquation.name),
+						A2($author$project$Main$viewSvgBox, 'svg-output-goal', 'var(--border-color)')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$style, 'margin-bottom', '1.5rem')
+					]),
+				_List_fromArray(
+					[
+						$author$project$Main$viewLabel('Your output'),
+						A2($author$project$Main$viewSvgBox, 'svg-output-user', userBorderColor)
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$style, 'margin-bottom', '1rem')
+					]),
+				_List_fromArray(
+					[
+						$author$project$Main$viewLabel('Your typst code'),
+						A2(
+						$elm$html$Html$input,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$type_('text'),
+								$elm$html$Html$Attributes$id('typst-input'),
+								$elm$html$Html$Attributes$value(model.expression),
+								$elm$html$Html$Events$onInput($author$project$Main$ExpressionChanged),
+								$author$project$Main$onKeyDown,
+								$elm$html$Html$Attributes$autofocus(true),
+								A2($elm$html$Html$Attributes$style, 'width', '100%'),
+								A2($elm$html$Html$Attributes$style, 'padding', '0.75rem 1rem'),
+								A2($elm$html$Html$Attributes$style, 'font-size', '0.95rem'),
+								A2($elm$html$Html$Attributes$style, 'font-family', 'var(--font-code)'),
+								A2($elm$html$Html$Attributes$style, 'border-radius', '6px'),
+								A2($elm$html$Html$Attributes$style, 'color', 'var(--text-primary)')
+							]),
+						_List_Nil)
+					])),
+				$author$project$Main$viewFeedback(model),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('btn-primary'),
+						$elm$html$Html$Events$onClick($author$project$Main$NewEquation),
+						A2($elm$html$Html$Attributes$style, 'padding', '0.6rem 1.25rem'),
+						A2($elm$html$Html$Attributes$style, 'font-size', '0.9rem')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('New Equation '),
+						A2(
+						$elm$html$Html$span,
+						_List_fromArray(
+							[
+								A2($elm$html$Html$Attributes$style, 'opacity', '0.6'),
+								A2($elm$html$Html$Attributes$style, 'font-size', '0.8rem')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('(cmd+return)')
+							]))
+					])),
+				$author$project$Main$viewFooter
+			]));
+};
+var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$p = _VirtualDom_node('p');
+var $author$project$Main$viewLanding = function (model) {
+	var overlayClass = _Utils_eq(model.page, $author$project$Main$Landing) ? 'landing-overlay' : 'landing-overlay hidden';
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class(overlayClass)
 			]),
 		_List_fromArray(
 			[
@@ -5708,115 +6439,53 @@ var $author$project$Main$view = function (model) {
 				$elm$html$Html$h1,
 				_List_fromArray(
 					[
-						A2($elm$html$Html$Attributes$style, 'margin-bottom', '1rem')
+						A2($elm$html$Html$Attributes$style, 'font-size', '3rem'),
+						A2($elm$html$Html$Attributes$style, 'font-weight', '500'),
+						A2($elm$html$Html$Attributes$style, 'margin', '0 0 0.5rem 0'),
+						A2($elm$html$Html$Attributes$style, 'color', 'var(--text-primary)')
 					]),
 				_List_fromArray(
 					[
 						$elm$html$Html$text('typcraft')
 					])),
 				A2(
-				$elm$html$Html$div,
+				$elm$html$Html$p,
 				_List_fromArray(
 					[
-						A2($elm$html$Html$Attributes$style, 'margin-bottom', '1rem')
+						A2($elm$html$Html$Attributes$style, 'font-size', '1.1rem'),
+						A2($elm$html$Html$Attributes$style, 'color', 'var(--text-secondary)'),
+						A2($elm$html$Html$Attributes$style, 'margin', '0 0 2rem 0')
 					]),
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$label,
-						_List_fromArray(
-							[
-								A2($elm$html$Html$Attributes$style, 'display', 'block'),
-								A2($elm$html$Html$Attributes$style, 'margin-bottom', '0.5rem')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Typst math expression:')
-							])),
-						A2(
-						$elm$html$Html$input,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$type_('text'),
-								$elm$html$Html$Attributes$value(model.expression),
-								$elm$html$Html$Events$onInput($author$project$Main$ExpressionChanged),
-								A2($elm$html$Html$Attributes$style, 'width', '100%'),
-								A2($elm$html$Html$Attributes$style, 'padding', '0.5rem'),
-								A2($elm$html$Html$Attributes$style, 'font-size', '1rem'),
-								A2($elm$html$Html$Attributes$style, 'font-family', 'monospace'),
-								A2($elm$html$Html$Attributes$style, 'box-sizing', 'border-box')
-							]),
-						_List_Nil)
+						$elm$html$Html$text('Use typst right in your browser!')
 					])),
 				A2(
-				$elm$html$Html$div,
+				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						A2($elm$html$Html$Attributes$style, 'margin-top', '1rem')
+						$elm$html$Html$Attributes$class('btn-primary'),
+						$elm$html$Html$Events$onClick($author$project$Main$StartApp),
+						A2($elm$html$Html$Attributes$style, 'padding', '0.75rem 2rem'),
+						A2($elm$html$Html$Attributes$style, 'font-size', '1rem'),
+						A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+						A2($elm$html$Html$Attributes$style, 'flex-direction', 'column'),
+						A2($elm$html$Html$Attributes$style, 'align-items', 'center')
 					]),
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$label,
-						_List_fromArray(
-							[
-								A2($elm$html$Html$Attributes$style, 'display', 'block'),
-								A2($elm$html$Html$Attributes$style, 'margin-bottom', '0.5rem')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Rendered output:')
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								A2($elm$html$Html$Attributes$style, 'border', '1px solid #000'),
-								A2($elm$html$Html$Attributes$style, 'padding', '1rem'),
-								A2($elm$html$Html$Attributes$style, 'min-height', '100px'),
-								A2($elm$html$Html$Attributes$style, 'background', '#ffffff'),
-								A2($elm$html$Html$Attributes$style, 'display', 'flex'),
-								A2($elm$html$Html$Attributes$style, 'align-items', 'center'),
-								A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
-								$elm$html$Html$Attributes$id('svg-output-user')
-							]),
-						_List_Nil)
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						A2($elm$html$Html$Attributes$style, 'margin-top', '1rem')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$label,
-						_List_fromArray(
-							[
-								A2($elm$html$Html$Attributes$style, 'display', 'block'),
-								A2($elm$html$Html$Attributes$style, 'margin-bottom', '0.5rem')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Goal: ' + model.goalEquation.name)
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								A2($elm$html$Html$Attributes$style, 'border', '1px solid #000'),
-								A2($elm$html$Html$Attributes$style, 'padding', '1rem'),
-								A2($elm$html$Html$Attributes$style, 'min-height', '100px'),
-								A2($elm$html$Html$Attributes$style, 'background', '#ffffff'),
-								A2($elm$html$Html$Attributes$style, 'display', 'flex'),
-								A2($elm$html$Html$Attributes$style, 'align-items', 'center'),
-								A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
-								$elm$html$Html$Attributes$id('svg-output-goal')
-							]),
-						_List_Nil)
-					])),
-				$author$project$Main$viewResult(model)
+						$elm$html$Html$text('Start')
+					]))
+			]));
+};
+var $author$project$Main$view = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				$author$project$Main$viewLanding(model),
+				$author$project$Main$viewApp(model)
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(

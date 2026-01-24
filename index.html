@@ -6,6 +6,48 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
     * { box-sizing: border-box; }
+    :root {
+      --bg-primary: #ffffff;
+      --bg-surface: #ffffff;
+      --bg-input: #f7f7f7;
+      --bg-input-focus: #f7f7f7;
+      --bg-overlay: rgba(255, 255, 255, 1.00);
+      --text-primary: #000000;
+      --text-secondary: #000000;
+      --text-muted: #000000;
+      --border-color: #777777;
+      --border-correct: #34a459;
+      --accent: rgb(050, 050, 050);
+      --accent-hover: rgb(250, 100, 200);
+      --font-ui: serif;
+      --font-code: monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #000000;
+        --bg-surface: #000000;
+        --bg-input: #1a1b26;
+        --bg-input-focus: #1b1c27;
+        --bg-overlay: rgba(06, 07, 08, 1.00);
+        --text-primary: #ffffff;
+        --text-secondary: #ffffff;
+        --text-muted: #ffffff;
+        --border-color: #3b4261;
+        --border-correct: #73daca;
+        --accent: rgb(050, 050, 050);
+        --accent-hover: rgb(250, 100, 200);
+      }
+    }
+    body { margin: 0; background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-ui); }
+    #typst-input { border: none; outline: none; background: var(--bg-input); transition: background 0.2s, box-shadow 0.2s; }
+    #typst-input:focus { background: var(--bg-input-focus); box-shadow: 0 2px 0 0 var(--accent); }
+    .github-link { opacity: 0.3; transition: opacity 0.2s; }
+    .github-link:hover { opacity: 1.0; }
+    .landing-overlay { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg-overlay); backdrop-filter: blur(8px); transition: opacity 0.3s, visibility 0.3s; }
+    .landing-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .btn-primary { background: var(--accent); color: #fff; border: none; border-radius: 6px; cursor: pointer; transition: background 0.15s; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    @media (prefers-color-scheme: dark) { .svg-output-box svg { filter: invert(1) hue-rotate(180deg); } }
   </style>
 </head>
 <body>
@@ -30,6 +72,12 @@
     // Listen for render requests from Elm
     app.ports.renderMathInternal.subscribe(({ expression, target }) => {
       const outputId = target === 'goal' ? 'svg-output-goal' : 'svg-output-user';
+      if (!expression) {
+        const output = document.getElementById(outputId);
+        if (output) { output.innerHTML = ''; }
+        app.ports.mathRendered.send({ target, svg: '' });
+        return;
+      }
       try {
         const svg = renderMath(expression);
         // Update the DOM directly
