@@ -6280,6 +6280,51 @@ var $author$project$Main$viewFooter = A2(
 					$elm$html$Html$text('typcraft')
 				])),
 			A2(
+			$elm$html$Html$span,
+			_List_fromArray(
+				[
+					A2($elm$html$Html$Attributes$style, 'font-size', '1.1rem'),
+					A2($elm$html$Html$Attributes$style, 'font-weight', '300'),
+					A2($elm$html$Html$Attributes$style, 'color', 'var(--text-primary)'),
+					A2($elm$html$Html$Attributes$style, 'opacity', '0.35')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Stuck? Try these resources:')
+				])),
+			A2(
+			$elm$html$Html$a,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$href('https://typst.app/docs/reference/'),
+					$elm$html$Html$Attributes$target('_blank'),
+					$elm$html$Html$Attributes$class('github-link'),
+					A2($elm$html$Html$Attributes$style, 'pointer-events', 'auto'),
+					A2($elm$html$Html$Attributes$style, 'color', 'var(--text-muted)'),
+					A2($elm$html$Html$Attributes$style, 'text-decoration', 'none'),
+					A2($elm$html$Html$Attributes$style, 'font-size', '0.85rem')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('typst official reference manual')
+				])),
+			A2(
+			$elm$html$Html$a,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$href('https://detypify.quarticcat.com/'),
+					$elm$html$Html$Attributes$target('_blank'),
+					$elm$html$Html$Attributes$class('github-link'),
+					A2($elm$html$Html$Attributes$style, 'pointer-events', 'auto'),
+					A2($elm$html$Html$Attributes$style, 'color', 'var(--text-muted)'),
+					A2($elm$html$Html$Attributes$style, 'text-decoration', 'none'),
+					A2($elm$html$Html$Attributes$style, 'font-size', '0.85rem')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('typst symbol fuzzy search')
+				])),
+			A2(
 			$elm$html$Html$a,
 			_List_fromArray(
 				[
