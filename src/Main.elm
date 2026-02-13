@@ -55,6 +55,12 @@ equations =
         , { name = "Euler's Formula", typst = "e^(i theta) = cos theta + i sin theta" }
         , { name = "The Binomial Theorem", typst = "(x + y)^n = sum_(k=0)^n binom(n, k) x^(n-k) y^k" }
         , { name = "The Fourier Transform", typst = "hat(f)(xi) = integral_(-oo)^oo f(x) e^(-2 pi i x xi) dif x" }
+        , { name = "Standard Deviation", typst = "sigma = sqrt(1/N sum_(i=1)^N (x_i - mu)^2), \"where\" mu eq.triple 1/N sum_(i=1)^N x_i" }
+        , { name = "Cauchy-Schwarz Inequality", typst = "|chevron.l bold(\"u\"), bold(\"v\") chevron.r|^2 <= chevron.l bold(\"u\"), bold(\"u\") chevron.r dot chevron.l bold(\"v\"), bold(\"v\") chevron.r" }
+        , { name = "Calculus", typst = "frac(dif f, dif t) = limits(lim)_(h arrow 0) frac(f(t + h) - f(t), h)" }
+        , { name = "Time dependent Schrödinger equation", typst = "i planck frac(dif, dif t) | Psi(t) chevron.r = hat(H) | Psi(t) chevron.r" }
+        , { name = "Black-Scholes Equation", typst = "frac(1, 2) sigma^2 S^2 frac(partial^2 V, partial S^2) + r S frac(partial V, partial S) + frac(partial V, partial t) - r V = 0" }
+        , { name = "Bayes' Theorem", typst = "P(A|B) = frac(P(B|A) dot P(A), P(B))" }
         ]
 
 

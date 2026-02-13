@@ -5,7 +5,7 @@ use typst::foundations::{Bytes, Datetime};
 use typst::syntax::{FileId, Source};
 use typst::text::{Font, FontBook};
 use typst::utils::LazyHash;
-use typst::{Library, World};
+use typst::{Library, LibraryExt, World};
 use typst_library::layout::PagedDocument;
 use wasm_bindgen::prelude::*;
 
